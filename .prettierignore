@@ -1,0 +1,14 @@
+.vercel
+.nuxt
+pnpm-lock.yaml
+!.storybook
+!.jest
+build
+coverage
+.next
+pnpm-lock.yaml
+!.storybook
+!.jest
+build
+coverage
+README.md

@@ -1,0 +1,37 @@
+{
+  "name": "nuxt-store-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "@nuxt/eslint": "1.2.0",
+    "@nuxt/fonts": "0.11.0",
+    "@nuxt/image": "1.10.0",
+    "@nuxt/scripts": "0.11.5",
+    "@pinia/nuxt": "^0.10.1",
+    "@unhead/vue": "^2.0.2",
+    "nuxt": "^3.16.1",
+    "pinia": "^3.0.1",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "packageManager": "pnpm@10.7.0",
+  "devDependencies": {
+    "@nuxt/eslint-config": "^1.2.0",
+    "eslint": "^9.23.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.5",
+    "prettier": "^3.5.3",
+    "sass": "^1.86.0",
+    "typescript": "^5.8.2",
+    "vue-tsc": "^2.2.8"
+  }
+}
