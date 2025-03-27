@@ -4,17 +4,15 @@
   </NuxtLayout>
 </template>
 
-<style lang="sass" scoped>
-*
-  box-sizing: border-box
-
+<style lang="sass">
 html,
 body
   margin: 0
+  padding: 0
 
 html
-  background-color: var(--color-html-bg)
-  color: var(--color-html)
+  background-color: $color-bg
+  color: $text-color
   font-family: $fontFamily
   font-size: calc(($html-font-size) * 1px)
   line-height: calc(($html-line-height) * 1px)

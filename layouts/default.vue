@@ -1,6 +1,6 @@
 <template>
   <div>
-    <page-header sticky />
+    <page-header />
     <main class="container">
       <slot />
     </main>

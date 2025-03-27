@@ -7,8 +7,15 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         sass: {
-          additionalData:
-            '@use "~/assets/styles/_colors.sass" as *\n@use "~/assets/styles/_vars.sass" as *\n@use "~/assets/styles/_type.sass" as *\n@use "~/assets/styles/_functions.sass" as *\n'
+          additionalData: `
+            @use "~/assets/styles/_reset.sass" as *
+            @use "~/assets/styles/_functions.sass" as *
+            @use "~/assets/styles/_queries.sass" as *
+            @use "~/assets/styles/_vars.sass" as *
+            @use "~/assets/styles/_type.sass" as *
+            @use "~/assets/styles/_colors.sass" as *
+            @use "~/assets/styles/_common.sass" as *
+          `
         }
       }
     }

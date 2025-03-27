@@ -1,0 +1,17 @@
+// @use "./_vars.sass" as *
+// @use "./_queries.sass" as *
+@use "./_functions.sass" as *
+
+@mixin container
+  padding: 0 base(1.2)
+  width: 100%
+  margin-inline: auto
+
+@mixin flex($justify: flex-start, $align: center)
+  display: flex
+  justify-content: $justify
+  align-items: $align
+
+
+@mixin transition($property: all, $duration: 0.3s)
+  transition: $property $duration ease

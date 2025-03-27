@@ -1,11 +1,15 @@
+@use "./_vars.sass" as *
+@use "./_queries.sass" as *
+@use "./_functions.sass" as *
+
 @mixin h1
-  // font-size: base(1.5)
+  font-size: base(1.5)
   line-height: 1.125
-  // margin: 0 0 base()
+  margin: 0 0 base()
   font-weight: 600
 
-  // @include mid-break
-  //   font-size: base(1)
-  //   margin: 0 0 base(.5)
+  @include mid-break
+    font-size: base(1)
+    margin: 0 0 base(.5)
 
 

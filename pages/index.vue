@@ -25,5 +25,5 @@
 h1
   @include h1
 p
-  color: $secondary
+  color: #000
 </style>

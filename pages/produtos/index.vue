@@ -12,10 +12,6 @@
 //  fetch the products
 const { data: products } = await useFetch('https://fakestoreapi.com/products')
 
-// definePageMeta({
-//   layout: 'products'
-// })
-
 useHead({
   title: 'Simple Store | Todos os produtos',
   meta: [{ name: 'description', content: 'Veja a lista completa de produtos!' }]
