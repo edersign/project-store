@@ -1,20 +1,27 @@
 <template>
   <div class="cart-page">
     <div class="container">
-      <h1 class="cart-title">Your Cart</h1>
+      <h1 class="cart-title">Carrinho</h1>
 
       <div v-if="cartItems.length > 0" class="cart-content">
         <div class="cart-items">
           <div v-for="(item, index) in cartItems" :key="index" class="cart-item">
             <div class="item-image">
-              <img :src="item.image" :alt="item.title" class="product-image">
+              <figure class="item-image-wrap">
+                <NuxtPicture
+                  loading="lazy"
+                  :src="item.image"
+                  :alt="item.title"
+                  class="product-image"
+                  width="80"
+                  height="80"
+                  lazy
+                />
+              </figure>
             </div>
             <div class="item-details">
               <h3 class="item-title">{{ item.title }}</h3>
-              <div class="item-options">
-                <span v-if="item.size" class="item-option">Size: {{ item.size }}</span>
-                <span v-if="item.color" class="item-option">Color: {{ item.color }}</span>
-              </div>
+
               <div class="item-quantity">
                 <button class="quantity-btn decrease" @click="decreaseQuantity(index)">-</button>
                 <span class="quantity-value">{{ item.quantity }}</span>
@@ -36,76 +43,80 @@
               <span class="summary-value">${{ calculateSubtotal().toFixed(2) }}</span>
             </div>
             <div class="summary-row">
-              <span class="summary-label">Shipping</span>
-              <span class="summary-value">Calculated at checkout</span>
+              <span class="summary-label">Frete</span>
+              <span class="summary-value">Calculado no checkout</span>
             </div>
             <div class="summary-row total">
               <span class="summary-label">Total</span>
               <span class="summary-value">${{ calculateSubtotal().toFixed(2) }}</span>
             </div>
 
-            <div class="payment-methods">
-              <img src="https://ext.same-assets.com/1131317820/2053826966.svg" alt="Payment Methods" class="payment-icon">
-              <span>Pay with browser.</span>
-            </div>
-
-            <button class="btn checkout-btn">Continue to Checkout</button>
+            <button class="btn checkout-btn">Finalizar compra</button>
           </div>
         </div>
       </div>
 
       <div v-else class="empty-cart">
-        <p class="empty-message">No items found.</p>
-        <nuxt-link to="/" class="btn continue-shopping-btn">Continue Shopping</nuxt-link>
+        <p class="empty-message">Carrinho vazio.</p>
+        <nuxt-link to="/" class="btn continue-shopping-btn">Continue comprando</nuxt-link>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useCartStore } from '~/stores/cartStore'
+interface CartItem {
+  id: number
+  title: string
+  slug: string
+  price: number
+  image: string
+  quantity: number
+}
 
-// Mock cart data
-const cartItems = ref([
-  {
-    id: 1,
-    title: 'Logo sweatshirt',
-    slug: 'logo-sweatshirt',
-    price: 50,
-    image: 'https://ext.same-assets.com/2675109532/1198502453.webp',
-    quantity: 1,
-    size: 'M',
-    color: 'Blue'
-  },
-  {
-    id: 3,
-    title: 'Container Baggu tote',
-    slug: 'container-baggu-tote',
-    price: 55,
-    image: 'https://ext.same-assets.com/2675109532/1407443501.webp',
-    quantity: 1,
-    size: 'One Size',
-    color: 'Black'
+// Initialize with empty values for SSR
+const cartItems = ref<CartItem[]>([])
+const cartStore = ref(null)
+
+// Only access the store on the client side
+onMounted(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  cartStore.value = useCartStore() as any
+  // Update cartItems when the component is mounted
+  if (cartStore.value) {
+    cartItems.value = (cartStore.value as { items: CartItem[] }).items
   }
-])
+})
 
-// Cart functions
+// Cart functions that check if cartStore exists
 const increaseQuantity = (index: number) => {
-  cartItems.value[index].quantity++
+  if (cartStore.value) {
+    ;(
+      cartStore.value as { updateQuantity: (index: number, quantity: number) => void }
+    ).updateQuantity(index, (cartStore.value as { items: CartItem[] }).items[index].quantity + 1)
+    cartItems.value = [...(cartStore.value as { items: CartItem[] }).items]
+  }
 }
 
 const decreaseQuantity = (index: number) => {
-  if (cartItems.value[index].quantity > 1) {
-    cartItems.value[index].quantity--
+  if (cartStore.value && (cartStore.value as { items: CartItem[] }).items[index].quantity > 1) {
+    ;(
+      cartStore.value as { updateQuantity: (index: number, quantity: number) => void }
+    ).updateQuantity(index, (cartStore.value as { items: CartItem[] }).items[index].quantity - 1)
+    cartItems.value = [...(cartStore.value as { items: CartItem[] }).items]
   }
 }
 
 const removeItem = (index: number) => {
-  cartItems.value.splice(index, 1)
+  if (cartStore.value) {
+    ;(cartStore.value as { removeItem: (index: number) => void }).removeItem(index)
+    cartItems.value = [...(cartStore.value as { items: CartItem[] }).items]
+  }
 }
 
 const calculateSubtotal = () => {
-  return cartItems.value.reduce((total, item) => total + item.price * item.quantity, 0)
+  return cartStore.value ? (cartStore.value as { subtotal: number }).subtotal : 0
 }
 </script>
 
@@ -113,10 +124,11 @@ const calculateSubtotal = () => {
 .cart-page
   padding: $spacing-lg 0 $spacing-xxl
 
+.container
+  @include container
+
 .cart-title
-  font-size: 2.5rem
-  font-weight: 700
-  margin-bottom: $spacing-xl
+  @include h1(1.4)
 
 // Cart with items
 .cart-content
@@ -132,14 +144,13 @@ const calculateSubtotal = () => {
   flex-direction: column
   gap: $spacing-md
 
-
 .cart-item
   display: grid
   grid-template-columns: 100px 1fr auto auto
   gap: $spacing-md
   align-items: center
   padding: $spacing-md
-  background-color: $gray-light
+  background-color: #ddd
   border-radius: $border-radius-sm
 
   .item-image
@@ -147,17 +158,27 @@ const calculateSubtotal = () => {
     height: 100px
     overflow: hidden
     border-radius: $border-radius-sm
+    background-color: $white
+    margin: auto
+    padding: $spacing-sm
+    display: flex
+    align-items: center
+    justify-content: center
+    figure
+      width: 100%
+      height: 100%
+      overflow: hidden
+      border-radius: $border-radius-sm
 
     .product-image
+      margin: auto
       width: 100%
       height: 100%
       object-fit: cover
 
   .item-details
     .item-title
-      font-size: 1.125rem
-      font-weight: 600
-      margin-bottom: $spacing-xs
+      @include h2(.6)
 
     .item-options
       display: flex
@@ -186,11 +207,9 @@ const calculateSubtotal = () => {
         &:hover
           background-color: $gray-light
 
-
       .quantity-value
         font-size: 0.875rem
         font-weight: 600
-
 
   .item-price
     font-size: 1rem
@@ -209,7 +228,6 @@ const calculateSubtotal = () => {
 
     &:hover
       color: $primary-color
-
 
   @media (max-width: $breakpoint-md)
     grid-template-columns: 80px 1fr auto
@@ -240,7 +258,6 @@ const calculateSubtotal = () => {
       font-weight: 600
       margin-bottom: 0
 
-
   .summary-content
     display: flex
     flex-direction: column
@@ -254,10 +271,9 @@ const calculateSubtotal = () => {
     &.total
       margin-top: $spacing-md
       padding-top: $spacing-md
-      border-top: 1px solid rgba($black, 0.1)
+      border-top: 1px solid rgba($black, 0.4)
       font-size: 1rem
       font-weight: 600
-
 
   .payment-methods
     display: flex
@@ -283,8 +299,8 @@ const calculateSubtotal = () => {
     transition: $transition-base
 
     &:hover
-      background-color: darken($primary-color, 10%)
-
+      background-color: $primary-color
+      opacity: 0.9
 
 // Empty cart
 .empty-cart
@@ -308,6 +324,6 @@ const calculateSubtotal = () => {
     transition: $transition-base
 
     &:hover
-      background-color: darken($primary-color, 10%)
-
+      background-color: $primary-color
+      opacity: 0.9
 </style>

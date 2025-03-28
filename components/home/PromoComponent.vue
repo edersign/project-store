@@ -1,7 +1,7 @@
 <template>
   <section class="promo-section">
     <div class="promo-content">
-      <h2 class="promo-title">BUILD<br />IN STYLE</h2>
+      <h2 class="promo-title">BUILD<br >IN STYLE</h2>
       <div class="product-card promo-card">
         <div class="product-category">CLASSICS</div>
         <div class="product-price">$35</div>
@@ -22,7 +22,6 @@
   </section>
 </template>
 <style lang="sass" scoped>
-// Promo Section
 .promo-section
   position: relative
   height: 400px
@@ -40,15 +39,14 @@
     max-width: 50%
 
   .promo-title
-    font-size: 4rem
-    font-weight: 700
+    @include h2(2.5)
     line-height: 1
-    margin-bottom: $spacing-lg
-    text-transform: uppercase
 
   .promo-card
     background-color: rgba($black, 0.75)
     max-width: 200px
+    padding: $spacing-md
+
   .promo-image-wrap
     position: relative
     flex: 1

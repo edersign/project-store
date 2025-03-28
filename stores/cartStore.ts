@@ -60,7 +60,5 @@ export const useCartStore = defineStore('cart', {
     }
   },
 
-  persist: import.meta.client ? {
-    storage: localStorage
-  } : false
+  persist: import.meta.client ? { storage: localStorage } : false
 })

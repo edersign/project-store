@@ -5,7 +5,7 @@
       <div class="section-header">
         <h2 class="section-title">{{ title }}</h2>
         <div class="view-controls">
-          <nuxt-link to="/category/apparel" class="view-all">VIEW ALL</nuxt-link>
+          <nuxt-link to="/category/apparel" class="view-all">Ver todos</nuxt-link>
           <button class="nav-button prev">←</button>
           <button class="nav-button next">→</button>
         </div>
@@ -20,20 +20,7 @@
 </template>
 
 <script setup lang="ts">
-export interface Products {
-  id?: number
-  title?: string
-  price?: number
-  description?: string
-  category?: string
-  image?: string
-  rating?: Rating
-}
-
-export interface Rating {
-  rate?: number
-  count?: number
-}
+import type { Products } from '~/types'
 
 const { category, title } = defineProps({
   title: {
@@ -50,12 +37,12 @@ const { category, title } = defineProps({
   }
 })
 
-const uri = 'https://fakestoreapi.com/products/category/' + category
+const uri = 'https://fakestoreapi.com/products/category/' + category + '?limit=4'
 
 //  fetch the products
-const { data: products } = await useFetch<Products[]>(uri)
-
-console.log(products)
+const { data: products } = await useFetch<Products[]>(uri, {
+  transform: (response): Products[] => response as Products[]
+})
 </script>
 <style lang="sass" scoped>
 .category-section

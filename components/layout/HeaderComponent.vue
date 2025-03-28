@@ -23,13 +23,10 @@
           <NuxtImg src="/images/icon-green.svg" alt="Store Logo" class="logo-img" />
           <span class="logo-text">Shop</span>
         </nuxt-link>
-        <!--nuxt-link to="/cart" class="cart" @click="toggleCartDrawer">CART ({{ cartItemsCount }})</nuxt-link -->
+
         <div class="cart">
           <button class="cart-button" aria-label="Open cart" @click="toggleCartDrawer">
-            CART
-            <span v-if="cartStore.items.length > 0" class="cart-count">{{
-              cartStore.itemCount
-            }}</span>
+            CART ({{ cartStore.itemCount }})
           </button>
         </div>
       </div>
@@ -56,7 +53,7 @@ const cartStore = useCartStore()
 
 // Navigation links array
 const navLinks: NavLink[] = [
-  { path: '/about', label: 'About' },
+  { path: '/about', label: 'Sobre' },
   { path: '/produtos', label: 'Produtos' }
 ]
 

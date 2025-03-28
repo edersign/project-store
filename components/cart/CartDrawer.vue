@@ -3,7 +3,7 @@
   <div v-if="isCartOpen" class="cart-drawer-overlay" @click="closeCartDrawer" />
   <div class="cart-drawer" :class="{ 'is-open': isCartOpen }">
     <div class="cart-drawer__header">
-      <h2 class="cart-drawer__title">Your Cart ({{ cartItems.length }})</h2>
+      <h2 class="cart-drawer__title">Carrinho ({{ cartItemCount }})</h2>
       <button class="cart-drawer__close" aria-label="Close cart" @click="closeCartDrawer">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -22,70 +22,95 @@
       </button>
     </div>
 
-    <div class="cart-drawer__content">
-      <div v-if="cartItems.length === 0" class="cart-drawer__empty">
-        <p>Your cart is empty</p>
-        <button class="cart-drawer__continue" @click="closeCartDrawer">Continue comprando</button>
-      </div>
-
-      <!--ul v-else class="cart-drawer__items">
-        <li v-for="(item, index) in cartItems" :key="index" class="cart-item">
-          <div class="cart-item__image">
-            <img :src="item.image" :alt="item.name" >
-          </div>
-          <div class="cart-item__details">
-            <h3 class="cart-item__name">{{ item.name }}</h3>
-            <p class="cart-item__price">${{ item.price.toFixed(2) }}</p>
-            <div class="cart-item__quantity">
-              <button
-                class="quantity-btn"
-                :disabled="item.quantity <= 1"
-                @click="updateQuantity(index, -1)"
-              >
-                -
-              </button>
-              <span>{{ item.quantity }}</span>
-              <button class="quantity-btn" @click="updateQuantity(index, 1)">+</button>
-            </div>
-          </div>
-          <button class="cart-item__remove" aria-label="Remove item" @click="removeItem(index)">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="3 6 5 6 21 6" />
-              <path
-                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-              />
-            </svg>
-          </button>
-        </li>
-      </ul-->
-
-      <div v-if="cartItems.length > 0" class="cart-drawer__footer">
-        <div class="cart-drawer__subtotal">
-          <span>Subtotal:</span>
-          <span>${{ calculateSubtotal().toFixed(2) }}</span>
+    <ClientOnly>
+      <div class="cart-drawer__content">
+        <div v-if="!cartItems.length" class="cart-drawer__empty">
+          <p>Your cart is empty</p>
+          <button class="cart-drawer__continue" @click="closeCartDrawer">Continue comprando</button>
         </div>
-        <button class="cart-drawer__checkout">Proceed to Checkout</button>
-        <NuxtLink to="/cart" class="cart-drawer__view-cart" @click="closeCartDrawer"
-          >View Cart</NuxtLink
-        >
+
+        <ul v-else class="cart-drawer__items">
+          <li v-for="(item, index) in cartItems" :key="index" class="cart-item">
+            <div class="cart-item__image">
+              <NuxtImg :src="item.image" :alt="item.title" />
+            </div>
+            <div class="cart-item__details">
+              <h3 class="cart-item__name">{{ item.title }}</h3>
+              <p class="cart-item__price">${{ item.price.toFixed(2) }}</p>
+              <div class="cart-item__quantity">
+                <button
+                  class="quantity-btn"
+                  :disabled="item.quantity <= 1"
+                  @click="updateQuantity(index, -1)"
+                >
+                  -
+                </button>
+                <span>{{ item.quantity }}</span>
+                <button class="quantity-btn" @click="updateQuantity(index, 1)">+</button>
+              </div>
+            </div>
+            <button class="cart-item__remove" aria-label="Remove item" @click="removeItem(index)">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="3 6 5 6 21 6" />
+                <path
+                  d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                />
+              </svg>
+            </button>
+          </li>
+        </ul>
+
+        <div v-if="cartItems.length > 0" class="cart-drawer__footer">
+          <div class="cart-drawer__subtotal">
+            <span>Subtotal:</span>
+            <span>${{ cartSubtotal.toFixed(2) }}</span>
+          </div>
+          <button class="cart-drawer__checkout">Finalizar compra</button>
+          <NuxtLink to="/cart" class="cart-drawer__view-cart" @click="closeCartDrawer"
+            >Ver carrinho</NuxtLink
+          >
+        </div>
       </div>
-    </div>
+      <template #fallback>
+        <div class="cart-drawer__content">
+          <div class="cart-drawer__loading">
+            <p>Loading cart...</p>
+          </div>
+        </div>
+      </template>
+    </ClientOnly>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { defineProps, defineEmits, computed } from 'vue'
+import { defineProps, defineEmits, ref, computed, onMounted } from 'vue'
 import { useCartStore } from '~/stores/cartStore'
+
+interface CartItem {
+  id: number
+  title: string
+  slug: string
+  price: number
+  image: string
+  quantity: number
+}
+
+interface CartStoreType {
+  items: CartItem[]
+  subtotal: number
+  updateQuantity: (index: number, quantity: number) => void
+  removeItem: (index: number) => void
+}
 
 const props = defineProps<{
   isOpen: boolean
@@ -93,25 +118,42 @@ const props = defineProps<{
 
 const emit = defineEmits(['close'])
 
-const cartStore = useCartStore()
 const isCartOpen = computed(() => props.isOpen)
-const cartItems = computed(() => cartStore.items)
+const cartStore = ref<CartStoreType | null>(null)
+const cartItems = ref<CartItem[]>([])
+const cartItemCount = ref(0)
+const cartSubtotal = ref(0)
+
+onMounted(() => {
+  cartStore.value = useCartStore() as CartStoreType
+  updateCartData()
+})
+
+const updateCartData = (): void => {
+  if (cartStore.value) {
+    cartItems.value = cartStore.value.items
+    cartItemCount.value = cartStore.value.items.reduce((count, item) => count + item.quantity, 0)
+    cartSubtotal.value = cartStore.value.subtotal
+  }
+}
 
 const closeCartDrawer = (): void => {
   emit('close')
 }
 
 const updateQuantity = (index: number, change: number): void => {
-  const newQuantity = cartStore.items[index].quantity + change
-  cartStore.updateQuantity(index, newQuantity)
+  if (cartStore.value) {
+    const newQuantity = cartStore.value.items[index].quantity + change
+    cartStore.value.updateQuantity(index, newQuantity)
+    updateCartData()
+  }
 }
 
 const removeItem = (index: number): void => {
-  cartStore.removeItem(index)
-}
-
-const calculateSubtotal = (): number => {
-  return cartStore.subtotal
+  if (cartStore.value) {
+    cartStore.value.removeItem(index)
+    updateCartData()
+  }
 }
 </script>
 

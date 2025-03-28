@@ -31,6 +31,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'Nuxt Shop',
+      titleTemplate: '%s | Nuxt Shop',
       htmlAttrs: {
         lang: 'pt-br'
       },
