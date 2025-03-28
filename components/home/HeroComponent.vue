@@ -48,8 +48,8 @@
     padding: $spacing-lg
 
   .hero-title
-    @include h1(4, 700)
     text-transform: uppercase
+    @include h1(4, 700)
 
   .hero-image
     width: 100%

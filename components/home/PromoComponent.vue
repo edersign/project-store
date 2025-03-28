@@ -39,8 +39,7 @@
     max-width: 50%
 
   .promo-title
-    @include h2(2.5)
-    line-height: 1
+    @include h2(2.5, 600, 1)
 
   .promo-card
     background-color: rgba($black, 0.75)
