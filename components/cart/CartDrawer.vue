@@ -28,7 +28,7 @@
         <button class="cart-drawer__continue" @click="closeCartDrawer">Continue comprando</button>
       </div>
 
-      <ul v-else class="cart-drawer__items">
+      <!--ul v-else class="cart-drawer__items">
         <li v-for="(item, index) in cartItems" :key="index" class="cart-item">
           <div class="cart-item__image">
             <img :src="item.image" :alt="item.name" >
@@ -67,7 +67,7 @@
             </svg>
           </button>
         </li>
-      </ul>
+      </ul-->
 
       <div v-if="cartItems.length > 0" class="cart-drawer__footer">
         <div class="cart-drawer__subtotal">
@@ -84,41 +84,34 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, defineEmits } from 'vue'
-
-interface CartItem {
-  name: string
-  price: number
-  quantity: number
-  image: string
-}
+import { defineProps, defineEmits, computed } from 'vue'
+import { useCartStore } from '~/stores/cartStore'
 
 const props = defineProps<{
   isOpen: boolean
-  items: CartItem[]
 }>()
 
-const emit = defineEmits(['close', 'update-quantity', 'remove-item'])
+const emit = defineEmits(['close'])
 
+const cartStore = useCartStore()
 const isCartOpen = computed(() => props.isOpen)
-const cartItems = computed(() => props.items)
+const cartItems = computed(() => cartStore.items)
 
 const closeCartDrawer = (): void => {
   emit('close')
 }
 
 const updateQuantity = (index: number, change: number): void => {
-  emit('update-quantity', { index, change })
+  const newQuantity = cartStore.items[index].quantity + change
+  cartStore.updateQuantity(index, newQuantity)
 }
 
 const removeItem = (index: number): void => {
-  emit('remove-item', index)
+  cartStore.removeItem(index)
 }
 
 const calculateSubtotal = (): number => {
-  return cartItems.value.reduce((total, item) => {
-    return total + item.price * item.quantity
-  }, 0)
+  return cartStore.subtotal
 }
 </script>
 
@@ -139,7 +132,7 @@ const calculateSubtotal = (): number => {
   right: -$drawer-width
   width: $drawer-width
   height: 100vh
-  background-color: $light-color
+  background-color: $gray-light
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1)
   z-index: 201
   @include transition(right)
@@ -191,7 +184,7 @@ const calculateSubtotal = (): number => {
 
   &__continue
     background-color: $primary-color
-    color: $light-color
+    color: $gray-light
     border: none
     padding: 10px 20px
     border-radius: 4px
@@ -221,7 +214,7 @@ const calculateSubtotal = (): number => {
   &__checkout
     width: 100%
     background-color: $primary-color
-    color: $light-color
+    color: $gray-light
     border: none
     padding: 12px
     border-radius: 4px

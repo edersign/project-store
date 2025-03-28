@@ -1,5 +1,12 @@
 export default defineNuxtConfig({
-  modules: ['@nuxt/eslint', '@nuxt/fonts', '@nuxt/image', '@nuxt/scripts', '@pinia/nuxt'],
+  modules: [
+    '@nuxt/eslint',
+    '@nuxt/fonts',
+    '@nuxt/image',
+    '@nuxt/scripts',
+    '@pinia/nuxt',
+    '@pinia/nuxt'
+  ],
   devtools: { enabled: true },
   compatibilityDate: '2024-11-01',
 
@@ -23,7 +30,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Simple Store',
+      title: 'Nuxt Shop',
       htmlAttrs: {
         lang: 'pt-br'
       },
@@ -33,5 +40,11 @@ export default defineNuxtConfig({
 
   typescript: {
     typeCheck: true
+  },
+
+  image: {
+    quality: 80,
+    format: ['webp'],
+    dir: 'public'
   }
 })

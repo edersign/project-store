@@ -1,29 +1,35 @@
 <template>
-  <div>
-    <h1>Welcome to Nuxt + SASS</h1>
-    <p>A simple example on how to use SAAS with a colors.sass file.</p>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. In perspiciatis omnis consequatur
-      quod necessitatibus autem repellat aperiam quia atque fugit praesentium earum rerum minus,
-      porro asperiores explicabo inventore animi ducimus. Itaque voluptatum facilis nobis,
-      praesentium, quasi pariatur veniam veritatis quo eligendi, ratione libero impedit. Distinctio,
-      delectus sapiente adipisci assumenda obcaecati aliquid exercitationem sit ad autem! Veritatis
-      nihil accusamus recusandae esse?
-    </p>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. In perspiciatis omnis consequatur
-      quod necessitatibus autem repellat aperiam quia atque fugit praesentium earum rerum minus,
-      porro asperiores explicabo inventore animi ducimus. Itaque voluptatum facilis nobis,
-      praesentium, quasi pariatur veniam veritatis quo eligendi, ratione libero impedit. Distinctio,
-      delectus sapiente adipisci assumenda obcaecati aliquid exercitationem sit ad autem! Veritatis
-      nihil accusamus recusandae esse?
-    </p>
+  <div class="home-page">
+    <!-- Hero Section -->
+    <LazyHomeHeroComponent />
+
+    <!-- Apparel Section -->
+    <LazyHomeFeaturesComponent title="Men's Clothing" category="men's clothing" />
+
+    <!-- Build In Style Section -->
+    <LazyHomePromoComponent />
+
+    <!-- Apparel Section -->
+    <LazyHomeFeaturesComponent title="Jewelery" category="jewelery" />
   </div>
 </template>
 
 <style lang="sass" scoped>
-h1
-  @include h1
-p
-  color: #000
+// On The Go Section
+.on-the-go-section
+  height: 400px
+  background-color: $black
+  color: $white
+  display: flex
+  align-items: center
+  justify-content: flex-end
+  margin: $spacing-xxl 0
+
+  .on-the-go-title
+    font-size: 4rem
+    font-weight: 700
+    line-height: 1
+    text-align: right
+    margin-bottom: 0
+    text-transform: uppercase
 </style>

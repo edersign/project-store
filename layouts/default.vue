@@ -1,23 +1,18 @@
 <template>
-  <div>
-    <page-header />
-    <main class="container">
+  <div class="layout">
+    <LazyLayoutHeaderComponent />
+    <main>
       <slot />
     </main>
-    <footer>
-      <ul>
-        <li><NuxtLink to="/">Home</NuxtLink></li>
-        <li><NuxtLink to="/about">About</NuxtLink></li>
-        <li><NuxtLink to="/produtos">Produtos</NuxtLink></li>
-      </ul>
-    </footer>
+    <LazyLayoutFooterComponent />
   </div>
 </template>
 
 <style lang="sass" scoped>
-.container
-  border: 1px solid #b9e39e
-  padding: 1rem
-  position: relative
-  background-color: #b8e39e87
+.layout
+  display: flex
+  flex-direction: column
+  min-height: 100vh
+main
+  flex: 1
 </style>

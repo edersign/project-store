@@ -1,17 +1,41 @@
-// @use "./_vars.sass" as *
-// @use "./_queries.sass" as *
+@use "./_vars.sass" as *
+@use "./_queries.sass" as *
 @use "./_functions.sass" as *
-
-@mixin container
-  padding: 0 base(1.2)
-  width: 100%
-  margin-inline: auto
+@use "./_colors.sass" as *
 
 @mixin flex($justify: flex-start, $align: center)
   display: flex
   justify-content: $justify
   align-items: $align
 
-
 @mixin transition($property: all, $duration: 0.3s)
   transition: $property $duration ease
+
+@mixin container
+  padding: 0 base(1.2)
+  width: 100%
+  margin-inline: auto
+
+h1, h2, h3, h4, h5, h6
+  font-family: $font-primary
+
+
+.btn
+  display: inline-block
+  padding: $spacing-sm $spacing-lg
+  background-color: $black
+  color: $white
+  border-radius: $border-radius-sm
+  transition: $transition-base
+  text-align: center
+  font-weight: 500
+
+  &:hover
+    background-color: $black
+    color: $white
+
+  &.btn-primary
+    background-color: $primary-color
+
+    &:hover
+      background-color: $primary-color

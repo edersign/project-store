@@ -18,12 +18,13 @@
     "@nuxt/scripts": "0.11.5",
     "@pinia/nuxt": "^0.10.1",
     "@unhead/vue": "^2.0.2",
+    "lucide-vue-next": "^0.484.0",
     "nuxt": "^3.16.1",
     "pinia": "^3.0.1",
+    "pinia-plugin-persistedstate": "^4.2.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
-  "packageManager": "pnpm@10.7.0",
   "devDependencies": {
     "@nuxt/eslint-config": "^1.2.0",
     "eslint": "^9.23.0",
@@ -33,5 +34,12 @@
     "sass": "^1.86.0",
     "typescript": "^5.8.2",
     "vue-tsc": "^2.2.8"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "sharp"
+    ]
   }
 }

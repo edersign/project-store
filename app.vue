@@ -5,6 +5,46 @@
 </template>
 
 <style lang="sass">
+// Custom font
+@font-face
+  font-family: 'WF Visual Sans'
+  src: url('/fonts/WFVisualSans-Regular.woff2') format('woff2')
+  font-weight: 400
+  font-style: normal
+  font-display: swap
+
+
+@font-face
+  font-family: 'WF Visual Sans'
+  src: url('/fonts/WFVisualSans-Medium.woff2') format('woff2')
+  font-weight: 500
+  font-style: normal
+  font-display: swap
+
+
+@font-face
+  font-family: 'WF Visual Sans'
+  src: url('/fonts/WFVisualSans-SemiBold.woff2') format('woff2')
+  font-weight: 600
+  font-style: normal
+  font-display: swap
+
+
+@font-face
+  font-family: 'WF Visual Sans'
+  src: url('/fonts/WFVisualSans-RegularText.woff2') format('woff2')
+  font-weight: 400
+  font-style: normal
+  font-display: swap
+
+
+@font-face
+  font-family: 'WF Visual Sans'
+  src: url('/fonts/WFVisualSans-SemiBoldText.woff2') format('woff2')
+  font-weight: 600
+  font-style: normal
+  font-display: swap
+
 html,
 body
   margin: 0
